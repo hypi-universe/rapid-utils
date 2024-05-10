@@ -39,7 +39,7 @@ fn main() {
     tonic_build::configure()
         .file_descriptor_set_path(format!("{}/plugin_descriptor.bin", out_dir))
         .include_file("plugin.rs")
-        .out_dir(out_dir)
+        .out_dir(out_dir.clone())
         .compile(protos.as_slice(), &[format!("{}/proto", out_dir)])
         .unwrap();
 }
