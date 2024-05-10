@@ -14,7 +14,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
-name: Deploy rapid fs
+name: Deploy rapid utils
 jobs:
   required:
     #Don't change noble without changing the Dockerfile
@@ -36,7 +36,7 @@ jobs:
       #Configure git to auth with the cross repo PAT
       - run: git config --global url."https://${CROSS_REPO_TOKEN}@github.com".insteadOf ssh://git@github.com
         env:
-          CROSS_REPO_TOKEN: ${{ CROSS_REPO_TOKEN }}
+          CROSS_REPO_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
       #      - run: git config --global url."https://${{ secrets.CROSS_REPO_TOKEN }}@github.com".insteadOf https://github.com
 
       - uses: Swatinem/rust-cache@v2
