@@ -3,7 +3,7 @@ use std::io::ErrorKind;
 use std::{env, fs};
 
 fn main() {
-    let pwd = env::var("PWD").unwrap();
+    let pwd = env::var("CARGO_MANIFEST_DIR").unwrap();
     let out_dir = format!("{}/src", pwd);
     let remote_protos = [
         "https://gist.githubusercontent.com/zcourts/72146d43a4cad99b7b9e2987076040fb/raw/8d3ff0b9fc6ba39d32e611b70518fefd6de5bd9b/rapid_plugin.proto",
