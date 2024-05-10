@@ -69,7 +69,6 @@ jobs:
         #--allow-dirty because we copy the proto dir from root
         # --dry-run to test changes before publishing to cargo
       - name: deploy
-        run: |
-          CARGO_REGISTRY_TOKEN=${RUST_CRATES_TOKEN} cargo publish --allow-dirty
+        run: cargo publish --allow-dirty
         env:
-          RUST_CRATES_TOKEN: ${{ secrets.RUST_CRATES_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ secrets.RUST_CRATES_TOKEN }}
