@@ -41,6 +41,11 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
 
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          version: "25.x"
+
       - name: Install ${{ matrix.toolchain }}
         uses: dtolnay/rust-toolchain@master
         with:
