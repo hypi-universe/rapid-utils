@@ -1,8 +1,9 @@
+include!(concat!(env!("OUT_DIR"), "/plugin.rs"));
+
 pub mod http_utils;
 pub mod wellknown;
 pub mod err;
-pub mod plugin;
-
+pub use hypi_rapid_plugin as plugin;
 pub use rapid_fs;
 pub use tokio;
 pub use tokio_stream;

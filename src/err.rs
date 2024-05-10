@@ -7,7 +7,8 @@ use rapid_fs::vfs::VfsErr;
 use serde::{Serialize, Serializer};
 use serde_json::json;
 use thiserror::Error;
-use crate::plugin::hypi_rapid_plugin::{InputSequence, PluginError};
+use crate::hypi_rapid_plugin::{InputSequence, PluginError};
+// use crate::plugin::hypi_rapid_plugin::{InputSequence, PluginError};
 use crate::wellknown::CODE_PIPELINE_PLUGIN_CONN_ERR;
 
 #[derive(Debug, Clone)]
