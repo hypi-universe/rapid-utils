@@ -1,6 +1,6 @@
 [package]
 name = "rapid-utils"
-version = "0.1.2"
+version = "0.1.4"
 edition = "2021"
 license-file = "LICENSE.md"
 description = "A bunch of utils and constants used across various Hypi RAPID server packages"

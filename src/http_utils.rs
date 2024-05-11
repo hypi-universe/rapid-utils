@@ -1,4 +1,6 @@
+use std::convert::Infallible;
 use std::fmt::{Display, Formatter};
+use http::Method;
 use crate::err::{ErrorCode, HttpError};
 use crate::wellknown::{METHOD_CONNECT, METHOD_DELETE, METHOD_GET, METHOD_HEAD, METHOD_OPTIONS, METHOD_PATCH, METHOD_POST, METHOD_PUT, METHOD_TRACE};
 
@@ -52,5 +54,22 @@ impl Display for HttpMethod {
             HttpMethod::Connect => f.write_str(METHOD_CONNECT),
             HttpMethod::Patch => f.write_str(METHOD_PATCH),
         }
+    }
+}
+impl TryFrom<&HttpMethod> for Method {
+    type Error = Infallible;
+
+    fn try_from(value: &HttpMethod) -> Result<Self, Self::Error> {
+        Ok(match value {
+            HttpMethod::Options => Method::OPTIONS,
+            HttpMethod::Get => Method::GET,
+            HttpMethod::Post => Method::POST,
+            HttpMethod::Put => Method::PUT,
+            HttpMethod::Delete => Method::DELETE,
+            HttpMethod::Head => Method::HEAD,
+            HttpMethod::Trace => Method::TRACE,
+            HttpMethod::Connect => Method::CONNECT,
+            HttpMethod::Patch => Method::PATCH,
+        })
     }
 }
