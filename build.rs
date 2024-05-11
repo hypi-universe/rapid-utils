@@ -8,7 +8,7 @@ fn main() {
     let out_dir = env::var("OUT_DIR").unwrap();
     let out_dir = format!("{}", out_dir);
     let remote_protos = [
-        "https://gist.githubusercontent.com/zcourts/72146d43a4cad99b7b9e2987076040fb/raw/fa4f314f1612d7263ea6bc8eafd5bceefa31a300/rapid_plugin.proto",
+        "https://gist.githubusercontent.com/zcourts/72146d43a4cad99b7b9e2987076040fb/raw/525795ea3e29f8e6d55367e17aef8c0d8a5b5f15/rapid_plugin.proto",
     ];
     let proto_dir = format!("{}/proto", out_dir);
     match File::open(proto_dir.clone()) {
