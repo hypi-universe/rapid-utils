@@ -1,13 +1,34 @@
-    use crate::err::ErrorCode;
-    use http::StatusCode;
-    use lazy_static::lazy_static;
-    use std::collections::HashMap;
-    use tonic::Code;
-    // use tonic::Code;
+use std::collections::HashMap;
 
-    pub const HDR_HOST: &str = "host";
-    pub const HDR_STATUS: &str = "status";
-    lazy_static! {
+use http::StatusCode;
+use lazy_static::lazy_static;
+use tonic::Code;
+
+use crate::err::ErrorCode;
+
+pub const CODE_PIPELINE_PLUGIN_STATUS_PREFIX: &str = "hypi_pipeline_plugin_status_";
+pub const CODE_PIPELINE_PLUGIN_CONN_ERR: &str = "hypi_pipeline_plugin_conn_err";
+pub const METHOD_OPTIONS: &str = "OPTIONS";
+pub const METHOD_GET: &str = "GET";
+pub const METHOD_POST: &str = "POST";
+pub const METHOD_PUT: &str = "PUT";
+pub const METHOD_DELETE: &str = "DELETE";
+pub const METHOD_HEAD: &str = "HEAD";
+pub const METHOD_TRACE: &str = "TRACE";
+pub const METHOD_CONNECT: &str = "CONNECT";
+pub const METHOD_PATCH: &str = "PATCH";
+pub const FORM_URL_ENCODED_HDR: &str = "application/x-www-form-urlencoded";
+pub const APPLICATION_JSON_HDR: &str = "application/json";
+///The HTTP method doesn't fit into other standard fields so it is captured by RAPID and put in as a meta field called method
+pub const HTTP_METHOD_META: &str = "method";
+///The path where the assets for a service is available in a plugin's container.
+pub const ASSETS_DIR: &str = "/home/rapid/files";
+///The path where RAPID server uploads/saves temporary files - it is up to plugins to move the files to a permanent location. RAPID automatically deletes data in this directory periodically
+pub const ASSETS_TMP_DIR: &str = "/home/rapid/files/.tmp";
+pub const HDR_CONTENT_TYPE: &str = "content-type";
+pub const HDR_HOST: &str = "host";
+pub const HDR_STATUS: &str = "status";
+lazy_static! {
     pub static ref CODE_UNKNOWN_DOMAIN: ErrorCode =
         ErrorCode::new("hypi_domain_not_found", StatusCode::NOT_FOUND);
     pub static ref CODE_FAILED_NO_CONTENT: ErrorCode =
@@ -104,19 +125,7 @@
         ErrorCode::new("hypi_form_io_err", StatusCode::BAD_REQUEST);
     pub static ref CODE_DOCKER_ERR: ErrorCode =
         ErrorCode::new("hypi_docker_err", StatusCode::INTERNAL_SERVER_ERROR);
-       }
-    pub const CODE_PIPELINE_PLUGIN_STATUS_PREFIX: &str = "hypi_pipeline_plugin_status_";
-    pub const CODE_PIPELINE_PLUGIN_CONN_ERR: &str = "hypi_pipeline_plugin_conn_err";
-    pub const METHOD_OPTIONS: &str = "OPTIONS";
-    pub const METHOD_GET: &str = "GET";
-    pub const METHOD_POST: &str = "POST";
-    pub const METHOD_PUT: &str = "PUT";
-    pub const METHOD_DELETE: &str = "DELETE";
-    pub const METHOD_HEAD: &str = "HEAD";
-    pub const METHOD_TRACE: &str = "TRACE";
-    pub const METHOD_CONNECT: &str = "CONNECT";
-    pub const METHOD_PATCH: &str = "PATCH";
-    lazy_static! {
+
         pub static ref GRPC_ERRS: HashMap<Code, ErrorCode> = HashMap::from([
             (
                 Code::Ok,
