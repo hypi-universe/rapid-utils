@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
+
 use bytes::Bytes;
 use http::StatusCode;
 use log::{info, warn};
@@ -7,14 +8,16 @@ use rapid_fs::vfs::VfsErr;
 use serde::{Serialize, Serializer};
 use serde_json::json;
 use thiserror::Error;
-use crate::hypi_rapid_plugin::{InputSequence, PluginError};
+
+use crate::hypi_rapid_plugin::{InputSequence, output_sequence, Pair, PluginError};
+use crate::plugin::OutputSequence;
 // use crate::plugin::hypi_rapid_plugin::{InputSequence, PluginError};
 use crate::wellknown::CODE_PIPELINE_PLUGIN_CONN_ERR;
 
 #[derive(Debug, Clone)]
 pub struct ErrorCode {
-   pub name: String,
-  pub  http_status: StatusCode,
+    pub name: String,
+    pub http_status: StatusCode,
 }
 
 impl ErrorCode {
@@ -25,6 +28,7 @@ impl ErrorCode {
         }
     }
 }
+
 impl Serialize for ErrorCode {
     fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
         where
@@ -85,6 +89,7 @@ impl From<&HttpError> for HttpError {
         }
     }
 }
+
 impl From<&HttpError> for Bytes {
     fn from(value: &HttpError) -> Self {
         serde_json::to_string(value)
@@ -157,6 +162,7 @@ impl From<VfsErr> for HttpError {
         }
     }
 }
+
 impl From<PipelineError> for HttpError {
     fn from(value: PipelineError) -> Self {
         match value {
@@ -215,14 +221,15 @@ impl From<PipelineError> for HttpError {
                 context: None,
             },
             PipelineError::PluginStatusErr(e) => {
-                let code =crate::wellknown::GRPC_ERRS.get(&e.code()).unwrap().to_owned();
+                let code = crate::wellknown::GRPC_ERRS.get(&e.code()).unwrap().to_owned();
                 // let code = grpc_code2status(e.code());
                 // let http_status = StatusCode::from_u16(code).unwrap();
                 HttpError {
-                    code, /*ErrorCode::of(
-                              format!("{}{}", CODE_PIPELINE_PLUGIN_STATUS_PREFIX, code,).as_str(),
-                              http_status,
-                          )*/
+                    code,
+                    /*ErrorCode::of(
+                                                 format!("{}{}", CODE_PIPELINE_PLUGIN_STATUS_PREFIX, code,).as_str(),
+                                                 http_status,
+                                             )*/
                     message: format!("Internal error. {}", e.to_string()),
                     context: None,
                 }
@@ -271,6 +278,20 @@ impl From<PipelineError> for HttpError {
     }
 }
 
+impl From<HttpError> for OutputSequence {
+    fn from(e: HttpError) -> Self {
+        OutputSequence {
+            value: Some(output_sequence::Value::Error(PluginError {
+                status: e.code.http_status.as_u16() as i32,
+                code: e.code.name,
+                message: e.message,
+                context: e.context.map(|e| {
+                    e.into_iter().map(|(k, v)| Pair { key: k, value: vec![v] }).collect()
+                }).unwrap_or_default(),
+            }))
+        }
+    }
+}
 
 #[derive(Error, Debug)]
 pub enum PipelineError {
@@ -309,7 +330,6 @@ pub enum RapidScriptError {
     #[error("Error evaluating RAPID script. {0}")]
     EvalErr(String),
 }
-
 
 impl Display for PluginError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {

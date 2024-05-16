@@ -1,6 +1,6 @@
 [package]
 name = "rapid-utils"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2021"
 license-file = "LICENSE.md"
 description = "A bunch of utils and constants used across various Hypi RAPID server packages"
@@ -13,7 +13,7 @@ readme = "README.md"
 categories = ["web-programming"]
 
 [dependencies]
-rapid-fs = "0.1.0"
+rapid-fs = { version = "0.1.1",path = "../rapid-fs" }
 serde = { version = "1.0.201", features = ["derive"] }
 serde_json = "1.0.117"
 thiserror = "1.0.60"
