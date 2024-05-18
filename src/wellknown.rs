@@ -20,7 +20,12 @@ pub const METHOD_PATCH: &str = "PATCH";
 pub const FORM_URL_ENCODED_HDR: &str = "application/x-www-form-urlencoded";
 pub const APPLICATION_JSON_HDR: &str = "application/json";
 ///The HTTP method doesn't fit into other standard fields so it is captured by RAPID and put in as a meta field called method
-pub const HTTP_METHOD_META: &str = "method";
+pub const META_HTTP_METHOD: &str = "method";
+///The name of the HTTP endpoint that triggered the execution.
+/// This is useful if a pipeline is re-used in multiple endpoints and you want to distinguish within the plugin
+/// as to exactly which endpoint lead to the current plugin's execution
+/// Note this is the endpoint name attribute you provide, if you don't provide a name, this will not be in the meta data
+pub const META_HTTP_ENDPOINT_NAME: &str = "endpoint";
 ///The path where the assets for a service is available in a plugin's container.
 pub const ASSETS_DIR: &str = "/home/rapid/files";
 ///The path where RAPID server uploads/saves temporary files - it is up to plugins to move the files to a permanent location. RAPID automatically deletes data in this directory periodically

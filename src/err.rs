@@ -281,6 +281,7 @@ impl From<PipelineError> for HttpError {
 impl From<HttpError> for OutputSequence {
     fn from(e: HttpError) -> Self {
         OutputSequence {
+            id: 0, //caller needs to set!
             value: Some(output_sequence::Value::Error(PluginError {
                 status: e.code.http_status.as_u16() as i32,
                 code: e.code.name,
